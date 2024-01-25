@@ -25,3 +25,10 @@ npm run dev
 ```
 npm run build
 ```
+
+### Демо
+
+<div align="center">
+<img alt="Compass logo" src="demo.gif">
+<br/><br/>
+</div>
