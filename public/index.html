@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Board</title>
+    <link rel="stylesheet" href="/main.css" type="text/css">
+    <script src="dist/main.js"></script>
+</head>
+<body>
+
+<script>
+
+    var board = new Component({
+        renderer: {
+            board: {
+                template: `<div class="kanban" ><div class="kanban" data-space="columns_space" data-dropzone="column"></div></div>`,
+                spaces: {
+                    columns_space: {
+                        acceptable: ['columns'],
+                    }
+                },
+                dropzone: {
+                    column: {
+                        acceptable: ['columns'],
+                        dropCondition(
+                            draggableComponent,
+                            oldDropzoneComponent,
+                            oldIndex,
+                            oldSpaceName,
+                            newDropzoneComponent,
+                            newIndex,
+                            newSpaceName
+                        ) {
+                            //  console.log(newIndex);
+                            return true;
+                        },
+                        /*   drop(draggableComponent, oldDropzoneComponent, oldIndex,
+                                oldSpaceName, newDropzoneComponent, newIndex, newSpaceName) {
+
+                               newDropzoneComponent.insertChild(draggableComponent, newSpaceName, newIndex);
+                           },*/
+                        threshold: 0.5,
+                        direction: 'horizontal'
+                    }
+                },
+            },
+            columns: {
+                template: `
+                        <div class="kanban__column" data-draggable="true">
+                            <div class="kanban__column-title" data-model="title" drag-handle="object"></div><input type="text">
+                            <div class="kanban__column-items" data-space="tasks_space" data-dropzone="task"></div>
+                            <button class="kanban__add-item" type="button" data-event-click="cl">+ Add</button>
+                        </div>
+                    `,
+                spaces: {
+                    tasks_space: {
+                        acceptable: ['tasks'],
+                    }
+                },
+                draggable: {
+                    /*  selectors: {
+                          active: ['active'],
+                          demo: ['opacity'],
+                      },
+                      dragCondition(draggableElement, draggableComponent) {
+                          return true;
+                      },
+                      dragend(draggableComponent) {
+                          console.log('columns', draggableComponent);
+                      },
+                       convertFormat(component, format) {
+                         if (format === 'text/plane') {
+                               return component.getModel().get('content');
+                           }
+                           return component;
+                       },
+                      dragImage(component, format, setDragImageCallable) {
+                           // e.dataTransfer.setDragImage(img, x, y)
+
+                          //setDragImageCallable(img, x, y);
+                      }*/
+                },
+                dropzone: {
+                    task: {
+                        acceptable: ['tasks'],
+                        /* selectors: {
+                             active: ['kanban__dropzone--active'],
+                         },*/
+                        dropCondition(
+                            draggableComponent,
+                            oldDropzoneComponent,
+                            oldIndex,
+                            oldSpaceName,
+                            newDropzoneComponent,
+                            newIndex,
+                            newSpaceName
+                        ) {
+// Ограничение на перемещение.
+/*
+                            if (newDropzoneComponent.getModel().get('id') === 1) {
+                                if (newIndex === 3) {
+                                    console.log('newIndex', newIndex);
+                                    return false
+                                }
+                                return true;
+                            }
+                            if (newDropzoneComponent.getModel().get('id') === 2) {
+                                return newIndex !== 0;
+                            }
+                            if (newDropzoneComponent.getModel().get('id') === 3) {
+                                return newDropzoneComponent.getChildsBySpace(newSpaceName) && newDropzoneComponent.getChildsBySpace(newSpaceName).length > newIndex;
+                            }
+
+                            if (newDropzoneComponent.getModel().get('id') === 4) {
+                                return newIndex !== 3 && newIndex !== 4 && newIndex !== 5;
+                            }
+
+                            if (newDropzoneComponent.getModel().get('id') === 5) {
+                                return newIndex % 2 === 0;
+                            }
+
+                            if (newDropzoneComponent.getModel().get('id') === 7) {
+                                return draggableComponent.getModel().get('content') !== 'hi322';
+                            }
+*/
+
+                            return true;
+                        },
+                        /*    drop(draggableComponent, oldDropzoneComponent, oldIndex,
+                               oldSpaceName, newDropzoneComponent, newIndex, newSpaceName) {
+                              newDropzoneComponent.insertChild(draggableComponent, newSpaceName, newIndex);
+                          },
+                          threshold: 0.3,
+                          direction: 'vertical'*/
+                    }
+                },
+                events: {
+                    cl(component) {
+                        console.log(component);
+                    },
+                }
+            },
+            tasks: {
+                template: `
+                        <div class="kanban__item" data-draggable="true">
+                            <div class="kanban__item-drag" drag-handle="plan/text"></div>
+                            <div class="kanban__item-input" contenteditable data-model="content" drag-handle="text" drag-format="plan/text"></div>
+                            <div class="kanban__item-drag"></div>
+                        </div>
+                    `,
+                /* draggable: {
+                   selectors: {
+                        active: ['active'],
+                        demo: ['opacity'],
+                    },
+                    dragCondition(draggableElement, draggableComponent) {
+                        return true;
+                    },
+                   createDemoFragment(component) {
+                        let div = document.createElement("div");
+                        div.style.width = "100px";
+                        div.style.height = "100px";
+                        div.style.background = "red";
+                        div.style.color = "white";
+                        div.innerHTML = "Hello";
+                        return div;
+                    },
+                    dragend(draggableComponent) {
+                        console.log(draggableComponent);
+                    },
+                    convertFormat(component, format) {
+                        if (format === 'text/plane') {
+                            return component.getModel().get('content');
+                        }
+                        return component;
+                    },
+                    dragImage(component, format, setDragImageCallable) {
+
+                         // e.dataTransfer.setDragImage(img, x, y)
+
+                        //setDragImageCallable(img, x, y);
+                    }
+                },*/
+                model: {
+                    content() {
+
+                    }
+                }
+            }
+        }
+    });
+
+    board.buildOf({
+        board: {
+            id: 1,
+            items: {
+                'columns_space': {
+                    columns: [
+                        {
+                            id: 1,
+                            title: "column 1",
+                            items: {
+                                tasks_space: {
+                                    tasks: [
+                                        {id: 1, content: 'hi1'},
+                                        {id: 2, content: 'hi2'},
+                                        {id: 3, content: 'hi3',},
+                                        {id: 4, content: 'hi4',},
+                                        {id: 9, content: 'hi5',},
+                                        {id: 10, content: 'hi6',},
+                                    ],
+                                }
+                            }
+                        },
+                        {
+                            id: 2,
+                            title: "column 2",
+                            items: {
+                                tasks_space: {
+                                    tasks: [
+                                        {id: 5, content: 'hi11'},
+                                        {id: 6, content: 'hi22'},
+                                        {id: 7, content: 'hi33',},
+                                    ],
+                                }
+                            }
+                        },
+                        {
+                            id: 3,
+                            title: "column 3",
+                            items: {
+                                tasks_space: {
+                                    tasks: [
+                                        {id: 11, content: 'hi111'},
+                                        {id: 12, content: 'hi322'},
+                                        {id: 13, content: 'hi313'},
+                                        {id: 14, content: 'hi314'},
+                                        {id: 15, content: 'hi15'},
+                                        {id: 16, content: 'hi216'},
+                                        {id: 17, content: 'hi217'},
+                                        {id: 189, content: 'hi218'},
+                                    ],
+                                }
+                            }
+                        },
+                        {
+                            id: 4,
+                            title: "column 4",
+                            items: {
+                                tasks_space: {
+                                    tasks: [
+                                        {id: 111, content: 'hi111'},
+                                        {id: 121, content: 'hi322'},
+                                        {id: 131, content: 'hi313'},
+                                        {id: 141, content: 'hi314'},
+                                        {id: 151, content: 'hi15'},
+                                        {id: 161, content: 'hi216'},
+                                        {id: 171, content: 'hi217'},
+                                        {id: 1891, content: 'hi218'},
+                                    ],
+                                }
+                            }
+                        },
+                        {
+                            id: 5,
+                            title: "column 5",
+                            items: {
+                                tasks_space: {
+                                    tasks: [
+                                        {id: 1111, content: 'hi111'},
+                                        {id: 1211, content: 'hi322'},
+                                        {id: 1311, content: 'hi313'},
+                                        {id: 1411, content: 'hi314'},
+                                        {id: 1511, content: 'hi15'},
+                                        {id: 1611, content: 'hi216'},
+                                        {id: 1711, content: 'hi217'},
+                                        {id: 18191, content: 'hi218'},
+                                    ],
+                                }
+                            }
+                        },
+                        {
+                            id: 6,
+                            title: "column 6",
+                            items: {
+                                tasks_space: {
+                                    tasks: [
+                                        {id: 11111, content: 'hi111'},
+                                        {id: 12111, content: 'hi322'},
+                                        {id: 13111, content: 'hi313'},
+                                        {id: 14111, content: 'hi15'},
+                                        {id: 16111, content: 'hi216'},
+                                        {id: 17111, content: 'hi217'},
+                                        {id: 181911, content: 'hi218'},
+                                        {id: 181912, content: 'hi218'},
+                                    ],
+                                }
+                            }
+                        },
+                        {
+                            id: 7,
+                            title: "column 7",
+                            items: {
+                                tasks_space: {
+                                    tasks: [],
+                                }
+                            }
+                        },
+                    ]
+                }
+            }
+        }
+    });
+
+    document.body.appendChild(board.fragment);
+
+</script>
+
+</body>
+</html>
